@@ -1,5 +1,8 @@
 import { Router } from 'express'
+
 import { SaveDatos, getData } from '../controllers/Ordenes.js'
+import { checkAdmin } from '../Middleware/Ordenes.js'
+
 const path = 'ordenes'
 
 const routerOrdenes = Router()

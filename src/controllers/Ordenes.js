@@ -1,8 +1,23 @@
 import Ordenes from '../Model/Orden.js'
+// import { tokenSing } from '../helpers/Tokens-Ordenes.js'
 
 export const getData = async (req, res) => {
-  const data = await Ordenes.find()
-  res.status(200).json(data)
+  try {
+    const data = await Ordenes.find()
+    // const users = {
+    //   rol: 'Operario'
+    // }
+    // const user = await tokenSing(users)
+    // res.status(200).json(user)
+    if (req.rol === 'Admin') {
+      res.status(200).json(data)
+    } else {
+      res.status(402).json({ data: ' No tienes acceso a esta informacion' })
+    }
+  } catch (error) {
+    console.log('mira lo que es ' + error)
+    res.status(500).json({ data: 'Error Server Internal' })
+  }
 }
 
 export const SaveDatos = async (req, res) => {
