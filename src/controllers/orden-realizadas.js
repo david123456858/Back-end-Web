@@ -19,26 +19,30 @@ export const SaveRealizada = async (req, res) => {
   const { description, repuestos, estado } = req.body
 
   try {
-    const fecha = obtenerFecha()
-    const parsedId = parseId(id)
-    const ordenDb = await Ordenes.findById({ _id: id })
+    if (req.rol === 'Operario') {
+      const fecha = obtenerFecha()
+      const parsedId = parseId(id)
+      const ordenDb = await Ordenes.findById({ _id: id })
 
-    if (!ordenDb) {
-      return res.status(404).json({ data: 'Invalid Id' })
+      if (!ordenDb) {
+        return res.status(404).json({ data: 'Invalid Id' })
+      }
+
+      const data = await Ordenes.findOneAndUpdate(parsedId,
+        {
+          $set: {
+            estado,
+            description,
+            repuestos,
+            TimeFinished: fecha
+          }
+        },
+        { new: true })
+      eventoRealizado.emit('realizado', { data })
+      res.status(200).json(data)
+    } else {
+      res.status(402).json({ data: ' No tienes acceso a esta ruta' })
     }
-
-    const data = await Ordenes.findOneAndUpdate(parsedId,
-      {
-        $set: {
-          estado,
-          description,
-          repuestos,
-          TimeFinished: fecha
-        }
-      },
-      { new: true })
-    eventoRealizado.emit('realizado', { data })
-    res.status(200).json(data)
   } catch (error) {
     console.log(error)
     res.status(500).json({ data: 'Error Server Internal' })

@@ -41,6 +41,8 @@ export const SaveDatos = async (req, res) => {
     if (req.rol === 'Admin' || req.rol === 'Operario') {
       const ordenCreate = await Ordenes.create(orden)
       res.status(201).json(ordenCreate)
+    } else {
+      res.status(402).json({ data: ' No tienes acceso a esta ruta' })
     }
   } catch (error) {
     console.log(error)
