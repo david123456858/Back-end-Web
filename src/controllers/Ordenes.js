@@ -38,8 +38,10 @@ export const SaveDatos = async (req, res) => {
       TimeFinished: null,
       check: false
     }
-    const ordenCreate = await Ordenes.create(orden)
-    res.status(201).json(ordenCreate)
+    if (req.rol === 'Admin' || req.rol === 'Operario') {
+      const ordenCreate = await Ordenes.create(orden)
+      res.status(201).json(ordenCreate)
+    }
   } catch (error) {
     console.log(error)
     res.status(500).json({ data: 'Server internal' })
