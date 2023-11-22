@@ -1,43 +1,47 @@
-import { Schema, model } from 'mongoose'
+import {
+  Schema,
+  model
+} from 'mongoose'
 
-const ordenSchema = Schema({
-  estado: {
-    type: String,
-    default: '1'
-  },
-  prioridad: {
-    type: String,
-    required: true
-  },
-  idAdmin: {
-    type: String,
-    default: null
-  },
-  idEquipo: {
-    type: String,
-    default: null
-  },
-  description: {
-    type: String,
-    default: null
-  },
-  repuestos: {
-    type: String,
-    default: null
-  },
-  TimeStar: {
-    type: String,
-    default: null
-  },
-  TimeFinished: {
-    type: String,
-    default: null
-  },
-  check: {
-    type: Boolean,
-    default: false
-  }
+const estadoSchema = new Schema({
+  nombre_estado: String,
+  id_estado: String
 })
-const Ordenes = model('orden', ordenSchema)
+const equipoSchema = new Schema({
+  id_equipo: String,
+  nombre_equipo: String
+})
 
-export default Ordenes
+const personaSchema = new Schema({
+  nombre: String,
+  id_usuario: String
+})
+const prioridadSchema = new Schema({
+  id_prioridad: String,
+  nombre_prioridad: String
+})
+
+const ordenesMatenimientoSchema = new Schema({
+  estado: estadoSchema,
+  id_orden: {
+    type: String
+  },
+  descripcion: {
+    type: String,
+    default: ''
+  },
+  equipo: equipoSchema,
+  comentarios: {
+    type: String,
+    default: ''
+  },
+  personas: [personaSchema],
+  administrativo: personaSchema,
+  hora_incio: Date,
+  hora_fin: Date,
+  prioridad: prioridadSchema
+})
+
+const OrdenesMatenimiento = model('OrdenesMatenimiento', ordenesMatenimientoSchema);
+
+export default OrdenesMatenimiento;
