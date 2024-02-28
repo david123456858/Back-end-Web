@@ -9,10 +9,8 @@ export const checkRol = async (req, res, next) => {
     const token = authorization.split(' ').pop()
 
     const decode = await VerifyToken(token)
-    if (decode.rol) {
-      req.rol = decode.rol
-      next()
-    }
+    req.rol = decode.rol ? decode.rol : undefined
+    next()
   } catch (error) {
     console.log('Nada manin tu por aqui no pasas' + error)
   }

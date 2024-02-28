@@ -1,7 +1,4 @@
-import {
-  Schema,
-  model
-} from 'mongoose'
+import { Schema, model } from 'mongoose'
 
 const estadoSchema = new Schema({
   nombre_estado: String,
@@ -42,6 +39,6 @@ const ordenesMatenimientoSchema = new Schema({
   prioridad: prioridadSchema
 })
 
-const OrdenesMatenimiento = model('OrdenesMatenimiento', ordenesMatenimientoSchema);
+const OrdenesMatenimiento = model('OrdenesMatenimiento', ordenesMatenimientoSchema)
 
-export default OrdenesMatenimiento;
+export default OrdenesMatenimiento
