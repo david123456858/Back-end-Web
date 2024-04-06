@@ -4,8 +4,10 @@ import { Server } from 'socket.io'
 import { createServer } from 'node:http'
 import { connectDB } from './src/database/db.js'
 import routerOrdenes from './src/router/Ordenes.js'
+import { config } from 'dotenv'
 // import infoSocket from './src/Model/informacion.js'
 
+config()
 const app = express()
 const server = createServer(app)
 const io = new Server(server, {
@@ -21,15 +23,18 @@ app.use(urlencoded({
   extended: true
 }))
 
-const port = 3002
+const port = process.env.PORT ?? 3002
 
 connectDB()
+  .then(() => {
+    console.log('Conectado a la base de datos')
+  })
 
 app.use(routerOrdenes)
 
-app.get('/socket', (req, res) => {
-  res.sendFile(process.cwd() + '/Client/index.html')
-})
+// app.get('/socket', (req, res) => {
+//   res.sendFile(process.cwd() + '/Client/index.html')
+// })
 
 // io.on('connection', (socket) => {
 //   let persona = socket.handshake.query.usuario

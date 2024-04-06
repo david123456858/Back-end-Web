@@ -1,44 +1,37 @@
 import { Schema, model } from 'mongoose'
 
-const estadoSchema = new Schema({
-  nombre_estado: String,
-  id_estado: String
-})
-const equipoSchema = new Schema({
-  id_equipo: String,
-  nombre_equipo: String
-})
-
-const personaSchema = new Schema({
-  nombre: String,
-  id_usuario: String
-})
-const prioridadSchema = new Schema({
-  id_prioridad: String,
-  nombre_prioridad: String
-})
-
-const ordenesMatenimientoSchema = new Schema({
-  estado: estadoSchema,
-  id_orden: {
+const ordenSchema = Schema({
+  idOrder: {
     type: String
   },
-  descripcion: {
+  estado: {
     type: String,
-    default: ''
+    default: '1'
   },
-  equipo: equipoSchema,
-  comentarios: {
+  prioridad: {
     type: String,
-    default: ''
+    required: true
   },
-  personas: [personaSchema],
-  administrativo: personaSchema,
-  hora_incio: Date,
-  hora_fin: Date,
-  prioridad: prioridadSchema
+  id_Usuario: {
+    type: String,
+    default: null
+  },
+  id_Equipo: {
+    type: String
+  },
+  description: {
+    type: String,
+    default: null
+  },
+  TimeFinished: {
+    type: String,
+    default: null
+  },
+  check: {
+    type: Boolean,
+    default: false
+  }
 })
+const Ordenes = model('ordenes', ordenSchema)
 
-const OrdenesMatenimiento = model('OrdenesMatenimiento', ordenesMatenimientoSchema)
-
-export default OrdenesMatenimiento
+export default Ordenes

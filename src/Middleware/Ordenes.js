@@ -12,6 +12,7 @@ export const checkRol = async (req, res, next) => {
     req.rol = decode.rol ? decode.rol : undefined
     next()
   } catch (error) {
-    console.log('Nada manin tu por aqui no pasas' + error)
+    console.log('aquí esta el problema' + error)
+    res.status(500).send('Error del sistema')
   }
 }
