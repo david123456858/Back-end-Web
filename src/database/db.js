@@ -1,6 +1,6 @@
 import { connect } from 'mongoose'
 
-const DB = 'mongodb://127.0.0.1:27017/ordenes'
+const DB = 'mongodb://localhost:27017/ordenes'
 export const connectDB = async () => {
   try {
     await connect(

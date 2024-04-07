@@ -1,4 +1,4 @@
-import { Axios } from 'axios'
+import axios from 'axios'
 import Ordenes from '../Model/Orden.js'
 import { tokenSing } from '../helpers/Tokens-Ordenes.js'
 
@@ -65,11 +65,11 @@ export const createToken = async (req, res) => {
 export const updateData = async (req, res) => {
   // quiero acuatlizar el estado de la orden
   try {
-    const { idOrder, estado, description } = req.body
+    const { idOrder, estado } = req.body
     const updateOperation = {
       $set: { estado, TimeFinished: Date.now() }
     }
-    if (!idOrder || !estado || !description) return res.status(422).json({ data: 'Unprocessable Content' })
+    if (!idOrder || !estado) return res.status(422).json({ data: 'Unprocessable Content' })
     const update = await Ordenes.findOneAndUpdate({ idOrder }, updateOperation)
     console.log(update)
     res.status(200).json('Se actualizo correctamente la orden')
@@ -88,7 +88,7 @@ export const updateChekc = async (req, res) => {
     if (check === 'true') {
       const registerDelete = await Ordenes.findOneAndDelete({ idOrder })
       console.log(registerDelete)
-      const response = await Axios.post(url, registerDelete)
+      const response = await axios.post(url, registerDelete)
       console.log(response)
       res.status(200).json('se elimino correctamente la orden')
     } else if (check === 'false') {
