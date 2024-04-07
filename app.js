@@ -17,7 +17,7 @@ const io = new Server(server, {
 })
 
 app.disable('x-powered-by')
-app.use(cors())
+app.use(cors({ origin: '*' }))
 app.use(json())
 app.use(urlencoded({
   extended: true

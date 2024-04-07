@@ -20,30 +20,24 @@ export const getData = async (req, res) => {
 export const SaveDatos = async (req, res) => {
   try {
     const { estado, prioridad, idEquipo, idUser, idOrder, description } = req.body
-    const ordenPriodidad = {
-      alta: '1',
-      media: '2',
-      baja: '3'
-    }
     if (!estado || !prioridad || !idEquipo || !idUser || !idOrder || !description) {
       return res.status(422).json({ data: 'Algunos datos de orden faltan' })
     }
+    const seach = await Ordenes.findOne({ idOrder })
+    console.log(seach)
+    if (seach) return res.status(409).json({ data: 'Esta orden ya existe' })
     const orden = {
       idOrder,
       estado,
-      prioridad: ordenPriodidad[prioridad],
+      prioridad,
       id_Usuario: idUser,
       id_Equipo: idEquipo,
       description,
       TimeFinished: null,
       check: false
     }
-    if (req.rol === 'admin' || req.rol === 'operario') {
-      const ordenCreate = await Ordenes.create(orden)
-      res.status(201).json(ordenCreate)
-    } else {
-      res.status(402).json({ data: ' No tienes acceso a esta ruta' })
-    }
+    const ordenCreate = await Ordenes.create(orden)
+    res.status(201).json(ordenCreate)
   } catch (error) {
     console.log(error)
     res.status(500).json({ data: 'Server internal' })

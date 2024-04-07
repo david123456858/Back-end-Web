@@ -8,7 +8,7 @@ const path = 'ordenes'
 const routerOrdenes = Router()
 
 routerOrdenes.get(`/${path}`, checkRol, getData)
-routerOrdenes.post(`/${path}/realize`, checkRol, SaveDatos)// TODO -> para realizar la orden
+routerOrdenes.post(`/${path}/realize`, SaveDatos)// TODO -> para realizar la orden
 routerOrdenes.put(`/${path}/finally`, checkRol, updateData)// TODO -> para finalizar la orden
 routerOrdenes.put(`/${path}/check`, checkRol, updateChekc)// TODO -> mandar a la otra api y eliminar de mongo
 routerOrdenes.get(`/${path}/token`, createToken)
