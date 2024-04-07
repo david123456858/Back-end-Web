@@ -32,6 +32,9 @@ connectDB()
 
 app.use(routerOrdenes)
 
+app.get('/', (req, res) => {
+  res.send('Bienvenido a ordenes DevelopWord')
+})
 // app.get('/socket', (req, res) => {
 //   res.sendFile(process.cwd() + '/Client/index.html')
 // })

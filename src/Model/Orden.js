@@ -2,7 +2,8 @@ import { Schema, model } from 'mongoose'
 
 const ordenSchema = Schema({
   idOrder: {
-    type: String
+    type: String,
+    required: true
   },
   estado: {
     type: String,
@@ -14,10 +15,11 @@ const ordenSchema = Schema({
   },
   id_Usuario: {
     type: String,
-    default: null
+    required: true
   },
   id_Equipo: {
-    type: String
+    type: String,
+    required: true
   },
   description: {
     type: String,
