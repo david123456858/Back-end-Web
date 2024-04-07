@@ -1,4 +1,4 @@
-// import { Axios } from 'axios'
+import { Axios } from 'axios'
 import Ordenes from '../Model/Orden.js'
 import { tokenSing } from '../helpers/Tokens-Ordenes.js'
 
@@ -19,13 +19,13 @@ export const getData = async (req, res) => {
 
 export const SaveDatos = async (req, res) => {
   try {
-    const { estado, prioridad, idEquipo, idUser, idOrder } = req.body
+    const { estado, prioridad, idEquipo, idUser, idOrder, description } = req.body
     const ordenPriodidad = {
       alta: '1',
       media: '2',
       baja: '3'
     }
-    if (!estado || !prioridad || !idEquipo || !idUser || !idOrder) {
+    if (!estado || !prioridad || !idEquipo || !idUser || !idOrder || !description) {
       return res.status(422).json({ data: 'Algunos datos de orden faltan' })
     }
     const orden = {
@@ -34,7 +34,7 @@ export const SaveDatos = async (req, res) => {
       prioridad: ordenPriodidad[prioridad],
       id_Usuario: idUser,
       id_Equipo: idEquipo,
-      description: null,
+      description,
       TimeFinished: null,
       check: false
     }
@@ -67,7 +67,7 @@ export const updateData = async (req, res) => {
   try {
     const { idOrder, estado, description } = req.body
     const updateOperation = {
-      $set: { estado, description }
+      $set: { estado, TimeFinished: Date.now() }
     }
     if (!idOrder || !estado || !description) return res.status(422).json({ data: 'Unprocessable Content' })
     const update = await Ordenes.findOneAndUpdate({ idOrder }, updateOperation)
@@ -81,15 +81,15 @@ export const updateData = async (req, res) => {
 
 export const updateChekc = async (req, res) => {
   try {
-    // const url = ''
+    const url = 'http://localhost:3001/api/v1/ordenes/save'
 
     const { idOrder, check, idEquipo } = req.body
     if (!idOrder || !check) return res.status(422).json({ data: 'Unprocessable Content' })
     if (check === 'true') {
       const registerDelete = await Ordenes.findOneAndDelete({ idOrder })
       console.log(registerDelete)
-      // const response = await Axios.post(url, registerDelete)
-
+      const response = await Axios.post(url, registerDelete)
+      console.log(response)
       res.status(200).json('se elimino correctamente la orden')
     } else if (check === 'false') {
       if (!idEquipo) return res.status(422).json({ data: 'Unprocessable Content' })
