@@ -16,7 +16,9 @@ export const getData = async (req, res) => {
     res.status(500).json({ data: 'Error Server Internal' })
   }
 }
-
+export const createOrder = async(req,res)=>{
+  
+}
 export const SaveDatos = async (req, res) => {
   try {
     const { estado, prioridad, idEquipo, idUser, idOrder, description } = req.body
@@ -34,6 +36,7 @@ export const SaveDatos = async (req, res) => {
       id_Equipo: idEquipo,
       description,
       TimeFinished: null,
+      TimeInit:toString(Date.now()),
       check: false
     }
     const ordenCreate = await Ordenes.create(orden)

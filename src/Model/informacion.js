@@ -6,6 +6,9 @@ const infoSocketSchema = new Schema({
   },
   idAdmin: {
     type: String
+  },
+  rol:{
+    type:String
   }
 })
 

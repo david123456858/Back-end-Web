@@ -10,7 +10,7 @@ import infoSocket from './src/Model/informacion.js'
 config()
 const app = express()
 const server = createServer(app)
-const io = new Server(server, {
+export const io = new Server(server, {
   cors: {
     origin: '*'
   }
@@ -35,12 +35,9 @@ app.use(routerOrdenes)
 app.get('/', (req, res) => {
   res.send('Bienvenido a ordenes DevelopWord')
 })
-app.get('/socket', (req, res) => {
-  res.sendFile(process.cwd() + '/Client/index.html')
-})
 
 io.on('connection', (socket) => {
-  let persona = socket.handshake.query.usuario
+  let persona = socket.handshake.query.usuario// recibo el id del usuario
   if (persona !== undefined && persona !== null) {
     persona = JSON.parse(persona)
     infoSocket.find({
