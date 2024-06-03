@@ -5,7 +5,7 @@ import { createServer } from 'node:http'
 import { connectDB } from './src/database/db.js'
 import routerOrdenes from './src/router/Ordenes.js'
 import { config } from 'dotenv'
-import infoSocket from './src/Model/informacion.js'
+// import infoSocket from './src/Model/informacion.js'
 import notificacionOrden from './src/Model/InfoPendiente.js'
 
 config()
@@ -39,6 +39,7 @@ app.get('/', (req, res) => {
 app.get('/socket', (req, res) => {
   res.sendFile(process.cwd() + '/client/index.html')
 })
+
 export const adminsSocket = []
 io.on('connection', async (socket) => {
   const persona = socket.handshake.query
@@ -46,13 +47,14 @@ io.on('connection', async (socket) => {
   console.log(persona.rol)
   if (persona.rol === 'administrador') {
     adminsSocket.push(socket)
-    // const infoP = await notificacionOrden.find()
-    // infoP.forEach(element => {
-    //   socket.emit('nueva orden', {
-    //     idOrder: element.idOrder,
-    //     desc: element.descripcion
-    //   })
-    // })
+    const infoP = await notificacionOrden.find()
+    console.log(infoP)
+    infoP.forEach(element => {
+      socket.emit('chat message', {
+        idOrder: element.idOrder,
+        desc: element.descripcion
+      })
+    })
   }
 
   socket.on('disconnect', () => {

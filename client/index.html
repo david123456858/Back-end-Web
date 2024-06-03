@@ -93,13 +93,11 @@
     /**Recibimos el mensaje del servidor entonces decidimos que hacer con el y listo.*/
     socket.on('chat message', (msg) => {
       const item = document.createElement('li')
-      item.textContent = msg;
+      item.textContent = msg.descripcion;
       messages.appendChild(item)
       window.scrollTo(0, document.body.scrollHeight)
     })
-    socket.io('Nueva orden',(msg)=>{
-      console.log(msg)
-    })
+    
 
   </script>
 </body>

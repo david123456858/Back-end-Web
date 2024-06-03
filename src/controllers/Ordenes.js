@@ -30,12 +30,12 @@ export const createpetition = async (req, res) => {
       descripcion
     }
     if (adminsSocket.length === 0) {
-      const pendiente = await notificacionOrden.create(peticion)
+      await notificacionOrden.create(peticion)
       res.status(202).json({ data: 'Se a guardado temporalmente' })
     } else {
       console.log('detecete un admins')
       adminsSocket.forEach(socket => {
-        socket.emit('Nueva orden', {
+        socket.emit('chat message', {
           idOrden,
           descripcion
         })
