@@ -4,11 +4,11 @@ const infoSocketSchema = new Schema({
   idSocket: {
     type: String
   },
-  idAdmin: {
+  idUser: {
     type: String
   },
-  rol:{
-    type:String
+  rol: {
+    type: String
   }
 })
 

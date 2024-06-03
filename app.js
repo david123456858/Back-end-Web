@@ -6,11 +6,12 @@ import { connectDB } from './src/database/db.js'
 import routerOrdenes from './src/router/Ordenes.js'
 import { config } from 'dotenv'
 import infoSocket from './src/Model/informacion.js'
+import notificacionOrden from './src/Model/InfoPendiente.js'
 
 config()
 const app = express()
 const server = createServer(app)
-export const io = new Server(server, {
+const io = new Server(server, {
   cors: {
     origin: '*'
   }
@@ -35,30 +36,27 @@ app.use(routerOrdenes)
 app.get('/', (req, res) => {
   res.send('Bienvenido a ordenes DevelopWord')
 })
-
-io.on('connection', (socket) => {
-  let persona = socket.handshake.query.usuario// recibo el id del usuario
-  if (persona !== undefined && persona !== null) {
-    persona = JSON.parse(persona)
-    infoSocket.find({
-      idAdmin: persona.id_usuario
-    }).then((notificaciones) => {
-      socket.emit('notificaciones', notificaciones)
-    }).catch((error) => {
-      console.error('Error al obtener notificaciones:', error)
-    })
-  } else {
-    console.log('No hay usuario')
+app.get('/socket', (req, res) => {
+  res.sendFile(process.cwd() + '/client/index.html')
+})
+export const adminsSocket = []
+io.on('connection', async (socket) => {
+  const persona = socket.handshake.query
+  console.log('Se conecto')
+  console.log(persona.rol)
+  if (persona.rol === 'administrador') {
+    adminsSocket.push(socket)
+    // const infoP = await notificacionOrden.find()
+    // infoP.forEach(element => {
+    //   socket.emit('nueva orden', {
+    //     idOrder: element.idOrder,
+    //     desc: element.descripcion
+    //   })
+    // })
   }
-  socket.on('nuevaNotificacion', (mensaje) => {
-    const nuevaNotificacion = new infoSocket(mensaje)
-    nuevaNotificacion.save().then(() => {
-      io.emit('nuevaNotificacion', nuevaNotificacion)
-    })
-  })
 
   socket.on('disconnect', () => {
-    console.log('Usuario desconectado')
+    console.log('Se desconceto el mmguevo')
   })
 })
 

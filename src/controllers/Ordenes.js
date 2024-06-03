@@ -1,6 +1,8 @@
 import axios from 'axios'
 import Ordenes from '../Model/Orden.js'
 import { tokenSing } from '../helpers/Tokens-Ordenes.js'
+import { adminsSocket } from '../../app.js'
+import notificacionOrden from '../Model/InfoPendiente.js'
 
 export const getData = async (req, res) => {
   try {
@@ -16,8 +18,32 @@ export const getData = async (req, res) => {
     res.status(500).json({ data: 'Error Server Internal' })
   }
 }
-export const createOrder = async(req,res)=>{
-  
+export const createpetition = async (req, res) => {
+  try {
+    const { idOrden, descripcion } = req.body
+    if (!idOrden || !descripcion) {
+      res.status(422).json({ error: 'Faltan algunos datos' })
+      return
+    }
+    const peticion = {
+      idOrder: idOrden,
+      descripcion
+    }
+    if (adminsSocket.length === 0) {
+      const pendiente = await notificacionOrden.create(peticion)
+      res.status(202).json({ data: 'Se a guardado temporalmente' })
+    } else {
+      console.log('detecete un admins')
+      adminsSocket.forEach(socket => {
+        socket.emit('Nueva orden', {
+          idOrden,
+          descripcion
+        })
+      })
+    }
+  } catch (error) {
+
+  }
 }
 export const SaveDatos = async (req, res) => {
   try {
@@ -25,6 +51,7 @@ export const SaveDatos = async (req, res) => {
     if (!estado || !prioridad || !idEquipo || !idUser || !idOrder || !description) {
       return res.status(422).json({ data: 'Algunos datos de orden faltan' })
     }
+
     const seach = await Ordenes.findOne({ idOrder })
     console.log(seach)
     if (seach) return res.status(409).json({ data: 'Esta orden ya existe' })
@@ -36,7 +63,7 @@ export const SaveDatos = async (req, res) => {
       id_Equipo: idEquipo,
       description,
       TimeFinished: null,
-      TimeInit:toString(Date.now()),
+      TimeInit: toString(Date.now()),
       check: false
     }
     const ordenCreate = await Ordenes.create(orden)
