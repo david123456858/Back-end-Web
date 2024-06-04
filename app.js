@@ -56,9 +56,10 @@ io.on('connection', async (socket) => {
       })
     })
   }
-  socket.on('acepte', (info) => {
+  socket.on('acepte', async (info) => {
     console.log(info)
-    console.log('ACEPTOOO')
+    await notificacionOrden.findByIdAndDelete(info.idNoti)
+    console.log('Se borro la vainass')
   })
   socket.on('disconnect', () => {
     console.log('Se desconceto el mmguevo')

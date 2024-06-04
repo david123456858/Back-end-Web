@@ -29,11 +29,9 @@ export const createpetition = async (req, res) => {
       idOrder: idOrden,
       descripcion
     }
-    if (adminsSocket.length === 0) {
-      await notificacionOrden.create(peticion)
-      res.status(202).json({ data: 'Se a guardado temporalmente' })
-    } else {
-      console.log('detecete un admins')
+    await notificacionOrden.create(peticion)
+    res.status(202).json({ data: 'Se a guardado temporalmente' })
+    if (adminsSocket.length !== 0) {
       adminsSocket.forEach(socket => {
         socket.emit('chat message', {
           idOrden,
@@ -42,7 +40,7 @@ export const createpetition = async (req, res) => {
       })
     }
   } catch (error) {
-
+    res.status(505).json({ data: 'Error internal server' })
   }
 }
 export const SaveDatos = async (req, res) => {

@@ -87,9 +87,6 @@
     const aceptar = document.getElementById('aceptar')
     const cancelar = document.getElementById('cancelar')
 
-
-
-
     form.addEventListener('submit', (e) => {
       e.preventDefault()
       if (input.value) {
@@ -98,7 +95,7 @@
       }
     })
     /**Recibimos el mensaje del servidor entonces decidimos que hacer con el y listo.*/
-    socket.on('chat message', (msg) => {
+    socket.on('chat message', async (msg) => {
       const item = document.createElement('li')
       item.textContent = msg.desc
       alert(msg._id)
@@ -106,20 +103,16 @@
       messages.appendChild(item)
       window.scrollTo(0, document.body.scrollHeight)
       aceptar.addEventListener('click', (e) => {
-      
         cosas = {
           idGrupo: '125434',
           prioridad: '12314',
           idNoti: msg._id
         }
         alert(cosas.idNoti)
-        console.log(cosas)
       socket.emit('acepte', cosas)
+
     })
     })
-    
-
-
   </script>
 
 </body>
