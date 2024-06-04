@@ -67,6 +67,8 @@
   <form id="form" action="">
     <input id="input" autocomplete="off" /><button>Send</button>
   </form>
+  <button id="aceptar">Aceptar</button>
+  <button id="cancelar">Cancelar</button>
   <!-- Usamos  socket io-->
   <script src="/socket.io/socket.io.js"></script>
   <script>
@@ -77,18 +79,17 @@
           rol: 'administrador', id: '123122343S'
         }
       }
-    ); 
+    );
 
     const form = document.getElementById('form')
     const input = document.getElementById('input')
     const messages = document.getElementById('messages')
     const aceptar = document.getElementById('aceptar')
     const cancelar = document.getElementById('cancelar')
-    aceptar.addEventListener('click',(e)=>{
-      alert('Precione el boton aceptar')
-    })
-    
-    
+
+
+
+
     form.addEventListener('submit', (e) => {
       e.preventDefault()
       if (input.value) {
@@ -100,16 +101,27 @@
     socket.on('chat message', (msg) => {
       const item = document.createElement('li')
       item.textContent = msg.desc
-      alert(msg.desc)
+      alert(msg._id)
       console.log(msg.desc)
       messages.appendChild(item)
       window.scrollTo(0, document.body.scrollHeight)
+      aceptar.addEventListener('click', (e) => {
+      
+        cosas = {
+          idGrupo: '125434',
+          prioridad: '12314',
+          idNoti: msg._id
+        }
+        alert(cosas.idNoti)
+        console.log(cosas)
+      socket.emit('acepte', cosas)
+    })
     })
     
 
+
   </script>
-  <button id="aceptar">Aceptar</button>
-  <button id="cancelar">Cancelar</button>
+
 </body>
 
 </html>

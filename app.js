@@ -48,15 +48,18 @@ io.on('connection', async (socket) => {
   if (persona.rol === 'administrador') {
     adminsSocket.push(socket)
     const infoP = await notificacionOrden.find()
-    console.log(infoP)
     infoP.forEach(element => {
       socket.emit('chat message', {
         idOrder: element.idOrder,
-        desc: element.descripcion
+        desc: element.descripcion,
+        _id: element._id
       })
     })
   }
-
+  socket.on('acepte', (info) => {
+    console.log(info)
+    console.log('ACEPTOOO')
+  })
   socket.on('disconnect', () => {
     console.log('Se desconceto el mmguevo')
   })
