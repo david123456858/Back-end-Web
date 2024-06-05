@@ -39,6 +39,9 @@ app.get('/', (req, res) => {
 app.get('/socket', (req, res) => {
   res.sendFile(process.cwd() + '/client/index.html')
 })
+app.get('/socket/ope', (req, res) => {
+  res.sendFile(process.cwd() + '/client/index1.html')
+})
 
 export const adminsSocket = []
 io.on('connection', async (socket) => {
@@ -60,6 +63,10 @@ io.on('connection', async (socket) => {
     console.log(info)
     await notificacionOrden.findByIdAndDelete(info.idNoti)
     console.log('Se borro la vainass')
+  })
+  socket.on('cancele', async (info) => {
+    await notificacionOrden.findByIdAndDelete(info)
+    console.log('Se cancelo la orden')
   })
   socket.on('disconnect', () => {
     console.log('Se desconceto el mmguevo')

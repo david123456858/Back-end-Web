@@ -29,14 +29,13 @@ export const createpetition = async (req, res) => {
       idOrder: idOrden,
       descripcion
     }
-    await notificacionOrden.create(peticion)
+    const response = await notificacionOrden.create(peticion)
     res.status(202).json({ data: 'Se a guardado temporalmente' })
+    // revisar esto
+    console.log(response)
     if (adminsSocket.length !== 0) {
       adminsSocket.forEach(socket => {
-        socket.emit('chat message', {
-          idOrden,
-          descripcion
-        })
+        socket.emit('chat message', response)
       })
     }
   } catch (error) {
