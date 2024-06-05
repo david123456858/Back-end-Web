@@ -44,23 +44,22 @@ export const createpetition = async (req, res) => {
 }
 export const SaveDatos = async (req, res) => {
   try {
-    const { estado, prioridad, idEquipo, idUser, idOrder, description } = req.body
-    if (!estado || !prioridad || !idEquipo || !idUser || !idOrder || !description) {
+    const { prioridad, idEquipo, idUser, idOrder, description } = req.body
+    if (!prioridad || !idEquipo || !idUser || !idOrder || !description) {
       return res.status(422).json({ data: 'Algunos datos de orden faltan' })
     }
-
     const seach = await Ordenes.findOne({ idOrder })
     console.log(seach)
     if (seach) return res.status(409).json({ data: 'Esta orden ya existe' })
     const orden = {
       idOrder,
-      estado,
+      estado: 'Pediente',
       prioridad,
       id_Usuario: idUser,
       id_Equipo: idEquipo,
       description,
       TimeFinished: null,
-      TimeInit: toString(Date.now()),
+      TimeInit: Date.now(),
       check: false
     }
     const ordenCreate = await Ordenes.create(orden)
@@ -86,11 +85,11 @@ export const createToken = async (req, res) => {
 export const updateData = async (req, res) => {
   // quiero acuatlizar el estado de la orden
   try {
-    const { idOrder, estado } = req.body
+    const { idOrder } = req.body
     const updateOperation = {
-      $set: { estado, TimeFinished: Date.now() }
+      $set: { estado: 'Chequear', TimeFinished: Date.now() }
     }
-    if (!idOrder || !estado) return res.status(422).json({ data: 'Unprocessable Content' })
+    if (!idOrder) return res.status(422).json({ data: 'Unprocessable Content' })
     const update = await Ordenes.findOneAndUpdate({ idOrder }, updateOperation)
     console.log(update)
     res.status(200).json('Se actualizo correctamente la orden')

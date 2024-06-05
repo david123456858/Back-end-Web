@@ -29,6 +29,9 @@ const ordenSchema = Schema({
     type: String,
     default: null
   },
+  TimeInit: {
+    type: Date
+  },
   check: {
     type: Boolean,
     default: false

@@ -7,6 +7,7 @@ import routerOrdenes from './src/router/Ordenes.js'
 import { config } from 'dotenv'
 // import infoSocket from './src/Model/informacion.js'
 import notificacionOrden from './src/Model/InfoPendiente.js'
+import Ordenes from './src/Model/Orden.js'
 
 config()
 const app = express()
@@ -43,6 +44,7 @@ app.get('/socket/ope', (req, res) => {
   res.sendFile(process.cwd() + '/client/index1.html')
 })
 
+export const opertSocket = []
 export const adminsSocket = []
 io.on('connection', async (socket) => {
   const persona = socket.handshake.query
@@ -57,6 +59,13 @@ io.on('connection', async (socket) => {
         desc: element.descripcion,
         _id: element._id
       })
+    })
+  }
+  if (persona.rol === 'operario') {
+    opertSocket.push(socket.idGrupo)
+    const infoP = await Ordenes.find({ id_Equipo: { $gt: socket.idGrupo } }) // $gt es para buscar con condicione especificas
+    infoP.forEach(elemento => {
+      socket.emit('chat message', elemento)
     })
   }
   socket.on('acepte', async (info) => {

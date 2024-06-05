@@ -76,7 +76,7 @@
     const socket = io(
       {
         query: {
-          rol: 'operario', id: '123122343S'
+          rol: 'operario', id: '123122343S',idGrupo: '125434'
         }
       }
     );
@@ -107,11 +107,11 @@
           idGrupo: '125434',
           prioridad: '12314',
           idNoti: msg._id
-        }
+        } 
         alert(cosas.idNoti)
       socket.emit('acepte', cosas)
     })
-    cancelar.addEventListener('click', (e)=>{
+        cancelar.addEventListener('click', (e)=>{
         socket.emit('cancele',msg._id)
     })
     })
