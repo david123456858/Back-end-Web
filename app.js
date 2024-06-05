@@ -62,8 +62,8 @@ io.on('connection', async (socket) => {
     })
   }
   if (persona.rol === 'operario') {
-    opertSocket.push(socket.idGrupo)
-    const infoP = await Ordenes.find({ id_Equipo: { $gt: socket.idGrupo } }) // $gt es para buscar con condicione especificas
+    opertSocket.push(socket)
+    const infoP = await Ordenes.find({ id_Equipo: { $eq: persona.idGrupo } }) // $eq es para buscar con condicione especificas
     infoP.forEach(elemento => {
       socket.emit('chat message', elemento)
     })
