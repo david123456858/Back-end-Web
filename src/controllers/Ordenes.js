@@ -1,8 +1,10 @@
 import axios from 'axios'
+
 import Ordenes from '../Model/Orden.js'
 import { tokenSing } from '../helpers/Tokens-Ordenes.js'
-import { adminsSocket } from '../../app.js'
+import { adminsSocket, opertSocket } from '../../app.js'
 import notificacionOrden from '../Model/InfoPendiente.js'
+import infoSocket from '../Model/informacion.js'
 
 export const getData = async (req, res) => {
   try {
@@ -62,8 +64,19 @@ export const SaveDatos = async (req, res) => {
       TimeInit: Date.now(),
       check: false
     }
-    const ordenCreate = await Ordenes.create(orden)
-    res.status(201).json(ordenCreate)
+    const notificacion = {
+      idGrupo: idEquipo,
+      prioridad,
+      fecha: Date.now()
+    }
+    const createNoti = await infoSocket.create(notificacion)
+    await Ordenes.create(orden)
+    if (opertSocket.length !== 0) {
+      opertSocket.forEach(socket => {
+        if (socket.idGrupo === idEquipo) { socket.emit('chat message', createNoti) }
+      })
+    }
+    res.status(201).json('Se guardo exitosamente la orden')
   } catch (error) {
     console.log(error)
     res.status(500).json({ data: 'Server internal' })
@@ -81,13 +94,12 @@ export const createToken = async (req, res) => {
     res.status(500).json({ data: 'Server internal' })
   }
 }
-
 export const updateData = async (req, res) => {
   // quiero acuatlizar el estado de la orden
   try {
     const { idOrder } = req.body
     const updateOperation = {
-      $set: { estado: 'Chequear', TimeFinished: Date.now() }
+      $set: { estado: 'chequear', TimeFinished: Date.now() }
     }
     if (!idOrder) return res.status(422).json({ data: 'Unprocessable Content' })
     const update = await Ordenes.findOneAndUpdate({ idOrder }, updateOperation)
@@ -98,7 +110,6 @@ export const updateData = async (req, res) => {
     res.status(500).json({ data: 'Server internal' })
   }
 }
-
 export const updateChekc = async (req, res) => {
   try {
     const url = 'http://localhost:3001/api/v1/ordenes/save'

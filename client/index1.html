@@ -67,6 +67,7 @@
   <form id="form" action="">
     <input id="input" autocomplete="off" /><button>Send</button>
   </form>
+  <button id="borrar">Borrar</button>
   <button id="aceptar">Aceptar</button>
   <button id="cancelar">Cancelar</button>
   <!-- Usamos  socket io-->
@@ -80,7 +81,7 @@
         }
       }
     );
-
+    const borrar = document.getElementById('borrar')
     const form = document.getElementById('form')
     const input = document.getElementById('input')
     const messages = document.getElementById('messages')
@@ -102,7 +103,9 @@
       console.log(msg.desc)
       messages.appendChild(item)
       window.scrollTo(0, document.body.scrollHeight)
-
+      borrar.addEventListener('click',(res)=>{
+        socket.emit('borrar', msg._id)
+      })
     })
   </script>
 

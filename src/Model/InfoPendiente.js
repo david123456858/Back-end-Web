@@ -6,6 +6,9 @@ const infoPendiente = new Schema({
   },
   descripcion: {
     type: String
+  },
+  fecha: {
+    type: Date
   }
 })
 

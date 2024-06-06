@@ -1,14 +1,14 @@
 import { Schema, model } from 'mongoose'
 
 const infoSocketSchema = new Schema({
-  idSocket: {
+  idGrupo: {
     type: String
   },
-  idUser: {
+  prioridad: {
     type: String
   },
-  rol: {
-    type: String
+  fecha: {
+    type: Date
   }
 })
 

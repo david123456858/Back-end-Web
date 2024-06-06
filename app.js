@@ -2,12 +2,12 @@ import express, { json, urlencoded } from 'express'
 import cors from 'cors'
 import { Server } from 'socket.io'
 import { createServer } from 'node:http'
+import { config } from 'dotenv'
+
 import { connectDB } from './src/database/db.js'
 import routerOrdenes from './src/router/Ordenes.js'
-import { config } from 'dotenv'
-// import infoSocket from './src/Model/informacion.js'
 import notificacionOrden from './src/Model/InfoPendiente.js'
-import Ordenes from './src/Model/Orden.js'
+import infoSocket from './src/Model/informacion.js'
 
 config()
 const app = express()
@@ -63,7 +63,8 @@ io.on('connection', async (socket) => {
   }
   if (persona.rol === 'operario') {
     opertSocket.push(socket)
-    const infoP = await Ordenes.find({ id_Equipo: { $eq: persona.idGrupo } }) // $eq es para buscar con condicione especificas
+    const infoP = await infoSocket.find({ idGrupo: { $eq: persona.idGrupo } }) // $eq es para buscar con condicione especificas
+    console.log(infoP)
     infoP.forEach(elemento => {
       socket.emit('chat message', elemento)
     })
@@ -76,6 +77,9 @@ io.on('connection', async (socket) => {
   socket.on('cancele', async (info) => {
     await notificacionOrden.findByIdAndDelete(info)
     console.log('Se cancelo la orden')
+  })
+  socket.on('borrar', async (info) => {
+
   })
   socket.on('disconnect', () => {
     console.log('Se desconceto el mmguevo')
