@@ -48,8 +48,6 @@ export const opertSocket = []
 export const adminsSocket = []
 io.on('connection', async (socket) => {
   const persona = socket.handshake.query
-  console.log('Se conecto')
-  console.log(persona.rol)
   if (persona.rol === 'administrador') {
     adminsSocket.push(socket)
     const infoP = await notificacionOrden.find()
@@ -79,7 +77,8 @@ io.on('connection', async (socket) => {
     console.log('Se cancelo la orden')
   })
   socket.on('borrar', async (info) => {
-
+    await infoSocket.findByIdAndDelete(info)
+    console.log('Se borro la notificacion')
   })
   socket.on('disconnect', () => {
     console.log('Se desconceto el mmguevo')

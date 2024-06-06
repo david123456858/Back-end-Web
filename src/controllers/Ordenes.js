@@ -73,7 +73,10 @@ export const SaveDatos = async (req, res) => {
     await Ordenes.create(orden)
     if (opertSocket.length !== 0) {
       opertSocket.forEach(socket => {
-        if (socket.idGrupo === idEquipo) { socket.emit('chat message', createNoti) }
+        const persona = socket.handshake.query
+        if (persona.idGrupo === idEquipo) {
+          socket.emit('chat message', createNoti)
+        }
       })
     }
     res.status(201).json('Se guardo exitosamente la orden')
@@ -94,6 +97,7 @@ export const createToken = async (req, res) => {
     res.status(500).json({ data: 'Server internal' })
   }
 }
+// Falta mandar de nuevo la revición del administrador
 export const updateData = async (req, res) => {
   // quiero acuatlizar el estado de la orden
   try {
