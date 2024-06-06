@@ -8,6 +8,7 @@ import { connectDB } from './src/database/db.js'
 import routerOrdenes from './src/router/Ordenes.js'
 import notificacionOrden from './src/Model/InfoPendiente.js'
 import infoSocket from './src/Model/informacion.js'
+import Ordenes from './src/Model/Orden.js'
 
 config()
 const app = express()
@@ -79,6 +80,9 @@ io.on('connection', async (socket) => {
   socket.on('borrar', async (info) => {
     await infoSocket.findByIdAndDelete(info)
     console.log('Se borro la notificacion')
+  })
+  socket.on('noAcepte', async (info) => {
+    await Ordenes.find({ _id: { $eq: info } })
   })
   socket.on('disconnect', () => {
     console.log('Se desconceto el mmguevo')

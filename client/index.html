@@ -69,6 +69,8 @@
   </form>
   <button id="aceptar">Aceptar</button>
   <button id="cancelar">Cancelar</button>
+  <button id="aceptarCheck">Chec bien</button>
+  <button id="No aceptar"> No acepto</button>
   <!-- Usamos  socket io-->
   <script src="/socket.io/socket.io.js"></script>
   <script>
@@ -86,6 +88,8 @@
     const messages = document.getElementById('messages')
     const aceptar = document.getElementById('aceptar')
     const cancelar = document.getElementById('cancelar')
+    const denegar = document.getElementById('No aceptar')
+    const check = document.getElementById('aceptarCheck')
 
     form.addEventListener('submit', (e) => {
       e.preventDefault()
@@ -110,6 +114,9 @@
         }
         alert(cosas.idNoti)
       socket.emit('acepte', cosas)
+    })
+    denegar.addEventListener('click',(e)=>{
+      socket.emit('noAcepte', msg._id)
     })
     cancelar.addEventListener('click', (e)=>{
         socket.emit('cancele',msg._id)
