@@ -55,7 +55,7 @@ export const SaveDatos = async (req, res) => {
     if (seach) return res.status(409).json({ data: 'Esta orden ya existe' })
     const orden = {
       idOrder,
-      estado: 'Pediente',
+      estado: 'pediente',
       prioridad,
       id_Usuario: idUser,
       id_Equipo: idEquipo,
