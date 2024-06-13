@@ -23,6 +23,7 @@ export const getData = async (req, res) => {
 export const createpetition = async (req, res) => {
   try {
     const { idOrden, descripcion } = req.body
+    console.log(idOrden, descripcion)
     if (!idOrden || !descripcion) {
       res.status(422).json({ error: 'Faltan algunos datos' })
       return
@@ -31,6 +32,7 @@ export const createpetition = async (req, res) => {
       idOrder: idOrden,
       descripcion
     }
+
     const response = await notificacionOrden.create(peticion)
     res.status(202).json({ data: 'Se a guardado temporalmente' })
     // revisar esto
@@ -47,6 +49,7 @@ export const createpetition = async (req, res) => {
 export const SaveDatos = async (req, res) => {
   try {
     const { prioridad, idEquipo, idUser, idOrder, description } = req.body
+    console.log(prioridad, idEquipo, idUser, idOrder, description)
     if (!prioridad || !idEquipo || !idUser || !idOrder || !description) {
       return res.status(422).json({ data: 'Algunos datos de orden faltan' })
     }
