@@ -47,6 +47,7 @@ app.get('/socket/ope', (req, res) => {
 
 export const opertSocket = []
 export const adminsSocket = []
+
 io.on('connection', async (socket) => {
   const persona = socket.handshake.query
   if (persona.rol === 'administrador') {
@@ -92,4 +93,5 @@ io.on('connection', async (socket) => {
 server.listen(port, () => {
   console.log(`listo para utilizar http://localhost:${port}`)
 })
+
 export default io
