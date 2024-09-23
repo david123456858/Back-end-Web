@@ -105,7 +105,7 @@ export const updateData = async (req, res) => {
   // quiero acuatlizar el estado de la orden
   try {
     const { idOrder } = req.body
-    const updateOperation = {
+    const updateOperation = { // cosas que se van atualizar
       $set: { estado: 'chequear', TimeFinished: Date.now() }
     }
     if (!idOrder) return res.status(422).json({ data: 'Unprocessable Content' })
